@@ -1,0 +1,29 @@
+{
+	"author": "Brian Carr <bcarr14@gmail.com>",
+	"name": "stringrouter",
+	"description": "A restful URL parsing and routing micro-module",
+	"version": "0.1.0",
+	"repository": {
+		"type": "git",
+		"url": "http://github.com/mrmarbles/stringrouter.git"
+	},
+	"main": "index",
+	"engines": { 
+		"node": "*" 
+	},
+	"devDependencies": {
+		"nodeunit": ">= 0.7.4"
+	},
+	"scripts": {
+		"test": "nodeunit tests/"
+	},
+	"keywords": [
+		"rest",
+		"restful",
+		"url",
+		"parser",
+		"parsing",
+		"web service"
+	],
+	"license": "MIT"
+}
