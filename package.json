@@ -2,7 +2,7 @@
 	"author": "Brian Carr <bcarr14@gmail.com>",
 	"name": "stringrouter",
 	"description": "A restful URL parsing and routing micro-module",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"repository": {
 		"type": "git",
 		"url": "http://github.com/mrmarbles/stringrouter.git"
