@@ -243,6 +243,32 @@ module.exports = {
 		
 	},
 
+    "Test simple string patter with custom namespace - not found": function(test) {
+
+        this.router.bindPattern("/hello/world", undefined, 'customnamespace');
+
+        this.router.dispatch("/hello/world", function(err, params) {
+            test.ok(err);
+            test.ok(!params);
+            test.ok(err.error);
+            test.equals(err.error, "No Match");
+            test.done();
+        });
+
+    },
+
+    "Test simple string patter with custom namespace - found": function(test) {
+
+        this.router.bindPattern("/hello/world", undefined, 'customnamespace');
+
+        this.router.dispatch("/hello/world", function(err, params) {
+            test.ok(!err);
+            test.ok(params);
+            test.done();
+        }, "customnamespace");
+
+    },
+
 	tearDown: function(callback) {
 		this.router = null;
 		callback();
