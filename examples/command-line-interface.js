@@ -18,12 +18,6 @@ router.bindPattern('echo {text:.*}', function(packet, callback) {
     callback.call(undefined, undefined, packet);
 });
 
-router.bindPattern('This is Katy', function(packet, callback) {
-  program.prompt('Katy, what is  your favorite color?', function(color) {
-    console.log("Katy's favorite color is %s", color);
-  });
-});
-
 router.bindPattern('logout', function(packet, callback) {
     credentials.username = 'anon';
     credentials.password = null;
