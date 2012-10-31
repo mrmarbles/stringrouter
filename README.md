@@ -1,6 +1,6 @@
 StringRouter : Find a match, execute a function.
 =======
-StringRouter is a high-level routing API that binds string patterns to the invocation of
+StringRouter is a high-level routing API that parses, parameterizes and binds string patterns to the invocation of
 callback functions. Can be easily used to deploy restful web service endpoints without the overhead of a full-stack framework or be
 used in conjunction with commander to create efficient REPL command line programs.  See the examples for more details.
 
