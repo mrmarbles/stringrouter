@@ -1,9 +1,8 @@
-StringRouter : Simple restful URL matching and parsing.
+StringRouter : Find a match, execute a function.
 =======
-StringRouter is a restful URL parsing micro-module.  Modularity is the name of the game here.  Feel free
-to use StringRouter as a stand-alone means to build sets of restful webservice endpoints without requiring
-the weight of a full-stack framework or integrate it into your own framework to provide enhanced URL parsing and
-routing capabilities.
+StringRouter is a high-level routing API that binds string patterns to the invocation of
+callback functions. Can be easily used to deploy restful web service endpoints without the overhead of a full-stack framework or be
+used in conjunction with commander to create efficient REPL command line programs.  See the examples for more details.
 
 Installation
 ---------------
@@ -12,8 +11,8 @@ Installation
 ### Basic API
 ---------------
 The below code is intended only to demonstrate basic `StringRouter` usage.  
-Here, the string `/people` is effectively registered as a string
-pattern that the router will recognize so that future calls to `dispatch()` 
+Here, the string `some string` is registered as a simple string
+pattern that the router will recognize so that future calls to `dispatch()` (more details on that method below)
 will attempt to match the provided string with previously registered patterns, and invoke
 a callback method when a match is detected.
 
@@ -22,10 +21,10 @@ var stringrouter = require('stringrouter');
 
 var router = stringrouter.getInstance();
 
-router.bindPattern('/people');
+router.bindPattern('some string');
 
-router.dispatch('/people', function(err, packet) {
-	/**
+router.dispatch('some string', function(err, packet) {
+	/*
 	 * Both the err and packet objects passed to the 
 	 * callback in this case will be undefined because
 	 * no variables were defined in the string pattern
@@ -45,8 +44,8 @@ of information collected during the execution lifecycle.  It is an object contai
 * **config**: If you configured this specific instance of your `StringRouter`, then that configuration
 will be represented here.
 
-* **params**: This is a key/value hash representing each configured URL variable for the matched pattern.  See the
-'Using URL Variables' section.
+* **params**: This is a key/value hash representing each configured string variable for the matched pattern.  See the
+'Using String Variables' section.
 
 * **data**: An optional and abitrary data type passed through from the call to `dispatch();`.
 
@@ -62,16 +61,16 @@ Once one or more patterns have been configured for your `StringRouter` instance,
 * **callback**: A callback method that will be invoked regardless as to whether or not a match for the `string` argument was found.  The method
 signature for this function is `callback(err, packet)`.  The `err` argument will only be defined if no registered pattern was matched
 for the first string argument of `dispatch()`.  The `packet` argument will always be defined, and contain contextual and runtime information
-as described in the 'What is Packet' section above.
+as described in the 'What does the packet contain' section above.
 
 * **data**: Any arbitrary data that you would like to pass through the function execution lifecycle.  
 This data will be represented inside of the `packet` with a key named `data` and can be accessed and/or manipulated
 at any point in the execution lifecycle - inside of a matched pattern-bound callback or inside of the callback function
 provided to the `dispatch()` method itself. 
 	
-### Using String (i.e., URL) Variables
+### Using String Variables
 
-Below is an example of a pattern with a declared variable.  String variables (URL variables) are declared
+Below is an example of a pattern with a declared variable.  String variables are declared
 inside of the pattern as a name, demarcated with surrounding curly-braces `{myvariable}`.  As a rule,
 variables will match any alphanumeric character set including dashes and underscores.
 
@@ -80,10 +79,10 @@ var stringrouter = require('stringrouter');
 
 var router = stringrouter.getInstance();
 
-router.bindPattern('/user/{id}');
+router.bindPattern('do {something}');
 ```
 
-The above pattern is indicating that anything succeeding `/user/` will be considered a variable, and match
+The above pattern is indicating that anything succeeding `do ` will be considered a variable, and match
 the pattern.  The name you give your variable is important, as it will be provided to the `dispatch()` function as an object literal
 with properties whose values represent the value of the URL variables;
 
@@ -92,21 +91,20 @@ var stringrouter = require('stringrouter');
 
 var router = stringrouter.getInstance();
 
-router.bindPattern('/user/{id}');
+router.bindPattern('hello {something}');
 
-router.dispatch('/user/1234', function(err, packet) {
-	/**
-	 * This string will match the user/{id} pattern, as as such,
+router.dispatch('hello world', function(err, packet) {
+	/*
+	 * This string will match the hello {something} pattern, as as such,
 	 * the packet.params argument provided to this callback will contain
-	 * an object with a property named 'id' with the integer value
-	 * '1324'.
+	 * an object with a property named 'hello' with the value 'world'.
 	 */
 });
 
-router.dispatch('/user/brian', function(err, packet) {
-	/**
+router.dispatch('hello brian', function(err, packet) {
+	/*
 	 * This string will also match the previously registered
-	 * pattern.  In this case, packet.params.id will have the value
+	 * pattern.  In this case, packet.params.hello will have the value
 	 * 'brian'.
 	 */
 });
@@ -121,7 +119,7 @@ router.bindPattern('/one/{two}/three/{four}');
 ### Using Custom Matching Rules
 
 There will be cases when you'll want to hone how matches are considered for any provided
-pattern.  This can be done easily by providing a regular expression inside of your URL variable
+pattern.  This can be done easily by providing a regular expression inside of your string variable;
 
 ```javascript
 router.bindPattern('/user/{id:[0-9]{5}}');
@@ -129,9 +127,9 @@ router.bindPattern('/user/{id:[0-9]{5}}');
 	
 Anything succeeding the colon `:` in a named variable will be used as a regular expression in order to determine
 matches for the given pattern.  Remember to keep it contained within the curly braces.  In the above example, the pattern
-is indicating only 5-digit numeric values will be matched as the URL variable.
+is indicating only 5-digit numeric values will be matched as the string variable.
 
-This is useful when you want to avoid URL collisions.  Consider the following scenario;
+This is useful when you want to avoid pattern collisions.  Consider the following scenario;
 
 ```javascript
 router.bindPattern('/user/{id}');
@@ -151,11 +149,11 @@ router.bindPattern('/user/{username:another regex here}');
 ### Pattern-Bound Callbacks
 
 Chances are you'll want to be able to execute code specific to a given route.  This can be done easily
-with the introduction of a pattern-bound callback that is bound to the pattern itself;
+with the introduction of a pattern-bound callback is invoked when a string match is detected when `dispatch()` is called;
 
 ```javascript
 router.bindPattern('/user/{id}', function(packet, callback) {
-
+    // this code will be executed
 });
 ```
 	
@@ -164,15 +162,15 @@ is guaranteed.  If a string that doesn't match the pattern is provided to `dispa
 callback is never invoked.
 
 The `packet` argument is an object containing the key/value pairs for the parsed URL variables of the provided
-string to `dispatch`.
+string to `dispatch` as well as `config` and `data` if it was provided to `dispatch()`.
 
 The `callback` argument is the callback provded as the second argument to `dispatch()`.  It is the responsibility of
 the pattern-bound callback to invoke the `dispatch()` callback with the appropriate arguments 
-if control is to be handed back to that function.
+if control is to be given to that function.
 
 ```javascript
 router.bindPattern('/user/{id}', function(packet, callback) {
-	/**
+	/*
 	 * Execute logic specific to this pattern here.  You have access
 	 * to the packet object.  Also, don't forget to invoke the provided
 	 * dispatch callback to provide control to that function.
@@ -186,11 +184,11 @@ router.bindPattern('/user/{id}', function(packet, callback) {
 	
 ### Simple Match Testing
 
-If you want to see if a given string pattern matches any pattern registered with an instance of `StringRouter` without having to explicitly call `dispatch()` 
-(and assume the overhead involved) then you can simply ask the `StringRouter` if it has a match for a provided string;
+If you want to see if a given string pattern matches any pattern registered with an instance of `StringRouter` without having to explicitly call `dispatch()`
+then you can simply ask the `StringRouter` if it has a match for a provided string;
 
 ```javascript
-router.hasMatch('/hello/world');
+router.hasMatch('hello world');
 ```
 	
 No callbacks, no mess - it will simply return a boolean indicating if the given string matches any registered patterns.  Of course using `dispatch()` is much more 
