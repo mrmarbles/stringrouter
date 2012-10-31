@@ -7,7 +7,39 @@ module.exports = {
 		callback();
 	},
 	
-	"Test simple string pattern": function(test) {
+	"Test simple pattern - has match": function(test) {
+		
+		this.router.bindPattern("/hello/world");
+		test.ok(this.router.hasMatch("/hello/world"));
+		test.done();
+		
+	},
+	
+	"Test simple pattern - no match": function(test) {
+		
+		this.router.bindPattern("/hello/world");
+		test.ok(!this.router.hasMatch("/hello/worl"));
+		test.done();
+		
+	},
+	
+	"Test complex pattern - has match": function(test) {
+		
+		this.router.bindPattern("/user/{name}");
+		test.ok(this.router.hasMatch("/user/brian"));
+		test.done();
+		
+	},
+	
+	"Test complex pattern - no match": function(test) {
+		
+		this.router.bindPattern("/user/{name:[0-9]+}");
+		test.ok(!this.router.hasMatch("/user/brian"));
+		test.done();
+		
+	},
+	
+	"Test simple string pattern with dispatch": function(test) {
 		
 		this.router.bindPattern("/hello/world");
 		this.router.dispatch("/hello/world", function(err, packet) {
