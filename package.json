@@ -19,6 +19,8 @@
 	},
 	"keywords": [
 		"rest",
+                "cli",
+                "repl",
 		"restful",
 		"url",
 		"parser",
