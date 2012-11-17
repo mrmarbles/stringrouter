@@ -25,24 +25,31 @@ router.bindPattern('logout', function(packet, callback) {
     callback.call(undefined, undefined, packet);
 });
 
-router.bindPattern('open the pod bay door{door:[s]?} {hal:[Hh]al}', function(packet, callback) {
+router.bindPattern('open the pod bay door[s]? [Hh]al', function(packet, callback) {
     console.log("I'm afraid I can't do that Dave.");
     callback.call(undefined, undefined, packet);
 });
 
 router.bindPattern('login', function(packet, callback) {
-    program.prompt('username: ', function(username) {
-        program.password('password: ', function(password) {
-            if (username === 'username' && password === 'password') {
-                credentials.username = username;
-                credentials.password = password;
-                console.log('Success!');
-            } else {
-                console.log('Invalid credentials');
-            }
-            callback.call(undefined, undefined, packet);
-        });
-    });
+	
+	if (credentials.username != 'anon') {
+		console.log("You're already logged in as '%s'", credentials.username);
+		callback.call(undefined, undefined, packet);
+	} else {
+		program.prompt('username: ', function(username) {
+	        program.password('password: ', function(password) {
+	            if (username === 'username' && password === 'password') {
+	                credentials.username = username;
+	                credentials.password = password;
+	                console.log('Success!');
+	            } else {
+	                console.log('Invalid credentials');
+	            }
+	            callback.call(undefined, undefined, packet);
+	        });
+	    });
+	}
+	
 });
 
 console.log('Welcome, this is a Nodejs StringRouter-based CLI');

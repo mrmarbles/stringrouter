@@ -2,10 +2,10 @@ var routerFactory = require('../lib/stringrouter');
 
 module.exports = {
 	
-	setUp: function(callback) {
-		this.router = routerFactory.getInstance();
-		callback();
-	},
+  setUp: function(callback) {
+    this.router = routerFactory.getInstance();
+    callback();
+  },
 	
 	"Test simple pattern - has match": function(test) {
 		
@@ -43,7 +43,6 @@ module.exports = {
 		
 		this.router.bindPattern("/hello/world");
 		this.router.dispatch("/hello/world", function(err, packet) {
-
 			test.ok(!err);
 			test.ok(packet);
 			test.ok(packet.params); // will be empty object
@@ -62,7 +61,7 @@ module.exports = {
 		this.router.dispatch("/hello/worl", function(err, packet) {
 			test.ok(err);
 			test.ok(packet);
-			test.ok(!packet.params) // params will be undefined
+			test.ok(!packet.params); // params will be undefined
 			test.done();
 		});
 
@@ -241,7 +240,7 @@ module.exports = {
 		
 		this.router.dispatch("/hello/worldd", function(err, packet) {
 			test.ok(err);
-			test.ok(err.error)
+			test.ok(err.error);
 			test.equals(err.error, "No Match");
 			test.done();
 		});		
@@ -258,7 +257,7 @@ module.exports = {
 		
 		router.dispatch("/hello/worldd", function(err, packet) {
 			test.ok(err);
-			test.ok(err.hello)
+			test.ok(err.hello);
 			test.equals(err.hello, "world");
 			test.done();
 		});		
@@ -280,112 +279,112 @@ module.exports = {
 		
 	},
 
-    "Test simple string patter with custom namespace - not found": function(test) {
+  "Test simple string patter with custom namespace - not found": function(test) {
 
-        this.router.ns('custom').bindPattern("/hello/world");
+    this.router.ns('custom').bindPattern("/hello/world");
 
-        this.router.dispatch("/hello/world", function(err, packet) {
-            test.ok(err);
-            test.ok(err.error);
-            test.equals(err.error, "No Match");
-            test.done();
-        });
+    this.router.dispatch("/hello/world", function(err, packet) {
+      test.ok(err);
+      test.ok(err.error);
+      test.equals(err.error, "No Match");
+      test.done();
+    });
 
-    },
+  },
 
-    "Test simple string patter with custom namespace - found": function(test) {
+  "Test simple string patter with custom namespace - found": function(test) {
 
-        this.router.namespace('custom').bindPattern("/hello/world", undefined);
+    this.router.namespace('custom').bindPattern("/hello/world", undefined);
 
-        this.router.namespace('custom').dispatch("/hello/world", function(err, packet) {
-            test.ok(!err);
-            test.ok(packet);
-            test.done();
-        });
+    this.router.namespace('custom').dispatch("/hello/world", function(err, packet) {
+      test.ok(!err);
+      test.ok(packet);
+      test.done();
+    });
 
-    },
+  },
     
-    "Test dispatch data pass-through": function(test) {
+  "Test dispatch data pass-through": function(test) {
 
-        this.router.bindPattern("/hello/world", undefined);
+    this.router.bindPattern("/hello/world", undefined);
 
-        this.router.dispatch("/hello/world", function(err, packet) {
-            test.ok(!err);
-            test.ok(packet.params);
-            test.ok(packet.data);
-            test.ok(packet.data.one);
-            test.ok(packet.data.three);
-            test.equals("two", packet.data.one);
-            test.equals("four", packet.data.three);
-            test.done();
-        }, {
-        	one: 'two',
-        	three: 'four'
-        });
+    this.router.dispatch("/hello/world", function(err, packet) {
+      test.ok(!err);
+      test.ok(packet.params);
+      test.ok(packet.data);
+      test.ok(packet.data.one);
+      test.ok(packet.data.three);
+      test.equals("two", packet.data.one);
+      test.equals("four", packet.data.three);
+      test.done();
+    }, {
+      one: 'two',
+      three: 'four'
+    });
 
-    },
+  },
     
-    "Test dispatch data pass-through to interstitial function": function(test) {
+  "Test dispatch data pass-through to interstitial function": function(test) {
 
-        this.router.bindPattern("/hello/world", function(packet, callback) {
-        	packet.data.five = "six";
-        	callback.call(undefined, undefined, packet);
-        });
+    this.router.bindPattern("/hello/world", function(packet, callback) {
+      packet.data.five = "six";
+      callback.call(undefined, undefined, packet);
+    });
 
-        this.router.dispatch("/hello/world", function(err, packet) {
-            test.ok(!err);
-            test.ok(packet.params);
-            test.ok(packet.data);
-            test.ok(packet.data.one);
-            test.ok(packet.data.three);
-            test.ok(packet.data.five);
-            test.equals("two", packet.data.one);
-            test.equals("four", packet.data.three);
-            test.equals("six", packet.data.five);
-            test.done();
-        }, {
-        	one: 'two',
-        	three: 'four'
-        });
+    this.router.dispatch("/hello/world", function(err, packet) {
+      test.ok(!err);
+      test.ok(packet.params);
+      test.ok(packet.data);
+      test.ok(packet.data.one);
+      test.ok(packet.data.three);
+      test.ok(packet.data.five);
+      test.equals("two", packet.data.one);
+      test.equals("four", packet.data.three);
+      test.equals("six", packet.data.five);
+      test.done();
+    }, {
+      one: 'two',
+      three: 'four'
+    });
 
-    },
+  },
     
-    "Test not found data pass-through": function(test) {
+  "Test not found data pass-through": function(test) {
 
-        this.router.bindPattern("/hello/world", undefined);
+    this.router.bindPattern("/hello/world", undefined);
 
-        this.router.dispatch("/invalid/string", function(err, packet) {
-            test.ok(err);
-            test.ok(packet.data);
-            test.ok(packet.data.one);
-            test.ok(packet.data.three);
-            test.equals("two", packet.data.one);
-            test.equals("four", packet.data.three);
-            test.done();
-        }, {
-        	one: 'two',
-        	three: 'four'
-        });
+    this.router.dispatch("/invalid/string", function(err, packet) {
+      test.ok(err);
+      test.ok(packet.data);
+      test.ok(packet.data.one);
+      test.ok(packet.data.three);
+      test.equals("two", packet.data.one);
+      test.equals("four", packet.data.three);
+      test.done();
+    }, {
+      one: 'two',
+      three: 'four'
+    });
 
-    },
+  },
     
-    "Test basic configuration": function(test) {
+  "Test basic configuration": function(test) {
 
-        var router = routerFactory.getInstance({
-        	noMatch: 'Test',
-        	arbitraryKey: 'Brian'
-        });
-        
-        var cfg = router.getConfig();
-        
-        test.ok(cfg);
-        test.ok(cfg.noMatch);
-        test.ok(cfg.arbitraryKey);
-        test.equals('Test', cfg.noMatch);
-        test.equals('Brian', cfg.arbitraryKey);
-        test.done();
+    var router = routerFactory.getInstance({
+      noMatch: 'Test',
+      arbitraryKey: 'Brian'
+    });
 
-    },
+    var cfg = router.getConfig();
+
+    test.ok(cfg);
+    test.ok(cfg.noMatch);
+    test.ok(cfg.arbitraryKey);
+    test.equals('Test', cfg.noMatch);
+    test.equals('Brian', cfg.arbitraryKey);
+    test.done();
+
+  },
 
 	tearDown: function(callback) {
 		this.router = null;
