@@ -53,7 +53,6 @@ module.exports = {
 
 	},
 	
-	
 	"Test simple string pattern - no match (1 of 2)": function(test) {
 		
 		this.router.bindPattern("/hello/world");
@@ -67,7 +66,6 @@ module.exports = {
 
 	},
 	
-	
 	"Test simple string pattern - no match (2 of 2)": function(test) {
 		
 		this.router.bindPattern("/hello/world");
@@ -79,7 +77,6 @@ module.exports = {
 		});
 
 	},
-	
 	
 	"Test string pattern with variable (1 of 2)": function(test) {
 		
@@ -94,7 +91,6 @@ module.exports = {
 		});
 
 	},
-	
 	
 	"Test string pattern with variable (2 of 2)": function(test) {
 		
@@ -386,9 +382,9 @@ module.exports = {
 
   },
 
-	tearDown: function(callback) {
-		this.router = null;
-		callback();
-	}
+  tearDown: function(callback) {
+    this.router = null;
+    callback();
+  }
 		
 };
