@@ -1,12 +1,16 @@
-StringRouter : Find a match, execute a function.
+StringRouter : URL parsing (path-info / REST web services endpoint) component.
 =======
 StringRouter is a high-level routing API that parses, parameterizes and binds string patterns to the invocation of
-callback functions. Can be easily used to deploy restful web service endpoints without the overhead of a full-stack framework or be
-used in conjunction with commander to create efficient REPL command line programs.  See the examples for more details.
+callback functions. Can be easily used to deploy restful web service endpoints without the overhead of a full-stack framework or simply
+parse path-info from URL strings.  See the examples for more details.
 
 Installation
 ---------------
 	npm install stringrouter
+
+Testing
+---------------
+    npm test
 	
 ### Basic API
 ---------------
@@ -21,9 +25,9 @@ var stringrouter = require('stringrouter');
 
 var router = stringrouter.getInstance();
 
-router.bindPattern('some string');
+router.bindPattern('/people');
 
-router.dispatch('some string', function(err, packet) {
+router.dispatch('/people', function(err, packet) {
 	/*
 	 * Both the err and packet objects passed to the 
 	 * callback in this case will be undefined because
@@ -79,10 +83,10 @@ var stringrouter = require('stringrouter');
 
 var router = stringrouter.getInstance();
 
-router.bindPattern('do {something}');
+router.bindPattern('/do/{something}');
 ```
 
-The above pattern is indicating that anything succeeding `do ` will be considered a variable, and match
+The above pattern is indicating that anything succeeding `/do/..` will be considered a variable, and match
 the pattern.  The name you give your variable is important, as it will be provided to the `dispatch()` function as an object literal
 with properties whose values represent the value of the URL variables;
 
@@ -91,17 +95,17 @@ var stringrouter = require('stringrouter');
 
 var router = stringrouter.getInstance();
 
-router.bindPattern('hello {something}');
+router.bindPattern('/hello/{hello}');
 
-router.dispatch('hello world', function(err, packet) {
+router.dispatch('/hello/world', function(err, packet) {
 	/*
-	 * This string will match the hello {something} pattern, as as such,
+	 * This string will match the /hello/world pattern, as as such,
 	 * the packet.params argument provided to this callback will contain
 	 * an object with a property named 'hello' with the value 'world'.
 	 */
 });
 
-router.dispatch('hello brian', function(err, packet) {
+router.dispatch('/hello/brian', function(err, packet) {
 	/*
 	 * This string will also match the previously registered
 	 * pattern.  In this case, packet.params.hello will have the value
