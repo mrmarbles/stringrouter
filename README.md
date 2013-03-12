@@ -1,4 +1,6 @@
-StringRouter : URL parsing (path-info / REST web services endpoint) component.
+[![Build Status](https://travis-ci.org/mrmarbles/stringrouter.png)](https://travis-ci.org/mrmarbles/stringrouter)
+
+stringrouter
 =======
 StringRouter is a high-level routing API that parses, parameterizes and binds string patterns to the invocation of
 callback functions. Can be easily used to deploy restful web service endpoints without the overhead of a full-stack framework or simply
@@ -270,12 +272,6 @@ any previously registered patterns, then the callback provided to that method wi
 invoked with an `err` object passed as the first argument.  This object will contain a single
 property named `error` containing the string 'No Match'.
 
-### License
-
-The MIT License
-
-Copyright (c) 2012 Brian Carr
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+License
+-------
+[MIT License](http://mrmarbles.mit-license.org/ "Mit License")

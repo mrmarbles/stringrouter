@@ -2,7 +2,7 @@
 	"author": "Brian Carr <bcarr14@gmail.com>",
 	"name": "stringrouter",
 	"description": "A restful URL parsing and routing component.",
-	"version": "0.3.1",
+	"version": "0.3.2",
 	"repository": {
 		"type": "git",
 		"url": "http://github.com/mrmarbles/stringrouter.git"
@@ -15,7 +15,7 @@
 		"nodeunit": ">= 0.7.4"
 	},
   "dependencies": {
-    "stringtokenizer": ">= 0.0.1"
+    "stringtokenizer": ">= 0.0.4"
   },
 	"scripts": {
 		"test": "nodeunit tests/"
