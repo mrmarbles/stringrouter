@@ -382,6 +382,16 @@ module.exports = {
 
   },
 
+  "Test unbind pattern": function(test) {
+
+    this.router.bindPattern('/hello/world');
+    test.ok(this.router.hasMatch("/hello/world"));
+    this.router.unBindPattern('/hello/world');
+    test.ok(this.router.hasMatch('/hello/world') === false);
+    test.done();
+
+  },
+
   tearDown: function(callback) {
     this.router = null;
     callback();
